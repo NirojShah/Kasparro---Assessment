@@ -296,6 +296,24 @@ Total time: ~2.5 hours
 - FastAPI and database: 30 minutes
 - Test predictions and documentation: 30 minutes
 
+## Assistance Disclosure & Verification Checks
+
+In accordance with assessment guidelines:
+- **Assistance Tools**: AI pair programming tools were utilized for scaffolding initial data structures, drafting pattern templates, and rapid prototyping.
+- **Verification Checks Conducted**:
+  - Validated deterministic character slice offsets with unit tests (`tests/test_agent_claim_spans.py`) ensuring `answer[start_char:end_char] == quote`.
+  - Executed end-to-end evaluation harness across all 40 development set answers for both V1 and V2 (`run_v1.py`, `run_v2.py`).
+  - Generated and validated all 10 test predictions for A41–A50 (`run_test_predictions.py`).
+  - Unit-tested mocked LLM agent responses in `tests/test_agent_v1_llm.py` (4/4 passing).
+  - Confirmed `.env` and all secret API keys remain strictly untracked and excluded from the repository.
+
+## Statement of Unfinished Work
+
+In accordance with the time limit policy ("Stop at the limit and state unfinished work"):
+- **Live LLM Production Runs**: A prototype Gemini LLM integration was implemented (`src/agent_v1_llm.py`, `test_llm_v1.py`). However, during end-to-end batch execution, Google AI Studio free-tier daily quotas (`429 RESOURCE_EXHAUSTED` with 20 requests/day limit on `gemini-3.8-flash`) prevented running all 50 answers with live LLM calls within the assessment time window.
+- **Decision**: The frozen V1 baseline and V2 candidate were executed using the deterministic, fast, zero-dependency rule-based engine. All four required live artifacts in `results/` are fully populated and reproducible without API rate limit barriers.
+- **Future Work**: Migrating the tool-calling prototype to a paid/higher-quota endpoint with Gemini function calling (`tools=[get_brand_facts]`) and multi-turn schema enforcement.
+
 ## Conclusion
 
 This submission demonstrates a complete claim extraction and classification system with:

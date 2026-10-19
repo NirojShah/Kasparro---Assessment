@@ -78,7 +78,7 @@ def main():
         json.dump(v1_predictions, f, indent=2)
     
     with open(results_dir / 'v1_test_predictions.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator='\n')
         writer.writerow(['answer_id', 'start_char', 'end_char', 'quote', 'classification'])
         for answer_id, predictions in v1_predictions.items():
             for pred in predictions:
@@ -95,7 +95,7 @@ def main():
         json.dump(v2_predictions, f, indent=2)
     
     with open(results_dir / 'v2_test_predictions.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator='\n')
         writer.writerow(['answer_id', 'start_char', 'end_char', 'quote', 'classification'])
         for answer_id, predictions in v2_predictions.items():
             for pred in predictions:

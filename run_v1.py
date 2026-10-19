@@ -118,7 +118,7 @@ def main():
     
     # Save predictions as CSV for easier review
     with open(results_dir / 'v1_predictions.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator='\n')
         writer.writerow(['answer_id', 'start_char', 'end_char', 'quote', 'classification'])
         for answer_id, predictions in all_predictions.items():
             for pred in predictions:

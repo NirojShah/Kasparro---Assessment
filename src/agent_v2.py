@@ -2,6 +2,7 @@
 import re
 from typing import List, Dict, Optional
 from .data_loader import BrandFacts
+from .utils import iter_sentence_spans
 
 
 class ClaimExtractionAgentV2:
@@ -28,12 +29,8 @@ class ClaimExtractionAgentV2:
         - end_char: end position in text
         - quote: the extracted text
         """
-        # Split into sentences
-        sentences = re.split(r'(?<=[.!?])\s+', answer_text)
-        
         claims = []
-        current_pos = 0
-        
+
         # Patterns that indicate factual claims
         claim_patterns = [
             r'\b(costs?|price|inr|₹)\b',
@@ -64,10 +61,7 @@ class ClaimExtractionAgentV2:
             r'^If a comparison',
         ]
         
-        for sentence in sentences:
-            start = current_pos
-            end = current_pos + len(sentence)
-            current_pos = end + 1  # +1 for the space we split on
+        for start, end, sentence in iter_sentence_spans(answer_text):
             
             # Check if should ignore
             should_ignore = False
@@ -90,7 +84,7 @@ class ClaimExtractionAgentV2:
                 claims.append({
                     'start_char': start,
                     'end_char': end,
-                    'quote': sentence.strip()
+                    'quote': sentence
                 })
         
         return claims

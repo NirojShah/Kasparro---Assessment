@@ -1,6 +1,28 @@
 """Utility functions for the claim extraction system."""
 import re
-from typing import Optional
+from typing import Iterator, Optional, Tuple
+
+
+def iter_sentence_spans(text: str) -> Iterator[Tuple[int, int, str]]:
+    """Yield whitespace-trimmed sentence text and its exact source span."""
+    cursor = 0
+    boundaries = re.finditer(r'(?<=[.!?])\s+', text)
+
+    for boundary in boundaries:
+        segment = text[cursor:boundary.start()]
+        leading_whitespace = len(segment) - len(segment.lstrip())
+        sentence = segment.strip()
+        if sentence:
+            start = cursor + leading_whitespace
+            yield start, start + len(sentence), sentence
+        cursor = boundary.end()
+
+    segment = text[cursor:]
+    leading_whitespace = len(segment) - len(segment.lstrip())
+    sentence = segment.strip()
+    if sentence:
+        start = cursor + leading_whitespace
+        yield start, start + len(sentence), sentence
 
 
 def extract_model_id(question: str, brand_id: str) -> str:
